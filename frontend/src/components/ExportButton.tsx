@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useEditorStore } from '@/stores/editorStore';
 import { exportUrl } from '@/lib/api';
+import { Button } from '@/components/ui/Button';
 
 const RESOLUTIONS: [number, number][] = [
   [2048, 1024],
@@ -38,14 +39,12 @@ export function ExportButton(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col gap-2 border-t border-ink-700 px-4 py-3">
-      <div className="flex items-center gap-3">
-        <label htmlFor="outputRes" className="text-xs uppercase tracking-wider text-ink-300">
-          Output
-        </label>
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-2xs uppercase tracking-widest text-ink-400">Resolution</span>
         <select
-          id="outputRes"
-          className="rounded border border-ink-600 bg-ink-800 px-2 py-1 text-sm"
+          aria-label="Output resolution"
+          className="rounded border border-ink-600 bg-ink-850 px-2 py-1 text-sm text-ink-100 focus:border-lime-500 focus:outline-none"
           value={`${outputResolution[0]}x${outputResolution[1]}`}
           onChange={(e) => {
             const [w, h] = e.target.value.split('x').map((n) => parseInt(n, 10));
@@ -61,15 +60,20 @@ export function ExportButton(): JSX.Element {
           ))}
         </select>
       </div>
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        size="md"
         onClick={() => void handleExport()}
         disabled={busy}
-        className="rounded bg-accent-500 px-4 py-2 font-medium text-ink-900 transition hover:bg-accent-600 disabled:opacity-60"
+        className="w-full"
       >
-        {busy ? 'Exporting…' : 'Export EXR'}
-      </button>
-      {error ? <p className="text-sm text-red-400">{error}</p> : null}
+        {busy ? 'Exporting…' : `Export EXR (${technique})`}
+      </Button>
+      {error ? <p className="text-xs text-coral-400">{error}</p> : null}
+      <p className="text-2xs leading-relaxed text-ink-500">
+        Renders the equirect at full resolution and downloads a 32-bit linear
+        EXR. Loads as-is in Maya / Houdini / Blender / Nuke / Unreal.
+      </p>
     </div>
   );
 }

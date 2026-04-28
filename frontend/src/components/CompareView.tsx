@@ -11,24 +11,30 @@ export function CompareView(): JSX.Element {
   if (inpainted.isError) return <Failure msg={inpainted.error.message} />;
 
   return (
-    <div className="flex h-full w-full items-center justify-center p-4">
-      <div className="aspect-square h-full max-h-[80vh] w-full max-w-[80vh]">
+    <div className="flex h-full w-full items-center justify-center p-6">
+      <div className="relative aspect-square h-full max-h-[80vh] w-full max-w-[80vh] overflow-hidden rounded-md border border-ink-700 bg-ink-950">
         <ReactCompareSlider
           itemOne={
             <ReactCompareSliderImage
               src={original.data}
               alt="Original"
-              style={{ objectFit: 'contain', background: '#0b0d10' }}
+              style={{ objectFit: 'contain', background: '#0a0b0c' }}
             />
           }
           itemTwo={
             <ReactCompareSliderImage
               src={inpainted.data}
               alt="Inpainted"
-              style={{ objectFit: 'contain', background: '#0b0d10' }}
+              style={{ objectFit: 'contain', background: '#0a0b0c' }}
             />
           }
         />
+        <span className="pointer-events-none absolute left-3 top-3 rounded bg-ink-950/70 px-2 py-0.5 text-2xs uppercase tracking-widest text-ink-200">
+          Original
+        </span>
+        <span className="pointer-events-none absolute right-3 top-3 rounded bg-ink-950/70 px-2 py-0.5 text-2xs uppercase tracking-widest text-lime-400">
+          Inpainted
+        </span>
       </div>
     </div>
   );
@@ -36,7 +42,7 @@ export function CompareView(): JSX.Element {
 
 function Failure({ msg }: { msg: string }): JSX.Element {
   return (
-    <div className="flex h-full w-full items-center justify-center text-sm text-red-400">
+    <div className="flex h-full w-full items-center justify-center text-sm text-coral-400">
       {msg}
     </div>
   );

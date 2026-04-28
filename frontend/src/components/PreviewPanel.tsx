@@ -22,17 +22,17 @@ function SimplePreview({
   if (preview.isPending) return <Spinner label="Rendering" />;
   if (preview.isError)
     return (
-      <div className="flex h-full w-full items-center justify-center text-sm text-red-400">
+      <div className="flex h-full w-full items-center justify-center text-sm text-coral-400">
         {preview.error.message}
       </div>
     );
 
   return (
-    <div className="flex h-full w-full items-center justify-center p-4">
+    <div className="flex h-full w-full items-center justify-center p-6">
       <img
         src={preview.data}
         alt={viewMode}
-        className="max-h-full max-w-full rounded border border-ink-700 object-contain"
+        className="max-h-full max-w-full rounded-md border border-ink-700 bg-ink-950 object-contain shadow-[0_0_60px_-20px_rgba(0,0,0,0.7)]"
       />
     </div>
   );

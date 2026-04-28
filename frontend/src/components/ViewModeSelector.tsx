@@ -13,24 +13,30 @@ export function ViewModeSelector(): JSX.Element {
   const setViewMode = useEditorStore((s) => s.setViewMode);
 
   return (
-    <div className="flex items-center gap-1 border-b border-ink-700 bg-ink-800/50 px-4 py-2">
-      <span className="mr-2 text-xs uppercase tracking-wider text-ink-300">View</span>
-      {MODES.map((m) => (
-        <button
-          key={m.value}
-          type="button"
-          onClick={() => setViewMode(m.value)}
-          className={[
-            'rounded px-3 py-1 text-sm transition',
-            viewMode === m.value
-              ? 'bg-accent-500 text-ink-900'
-              : 'text-ink-200 hover:bg-ink-700',
-          ].join(' ')}
-          title={`Shortcut: ${m.key}`}
-        >
-          {m.label}
-        </button>
-      ))}
+    <div className="flex items-center gap-6 border-b border-ink-700 bg-ink-900 px-5">
+      {MODES.map((m) => {
+        const active = viewMode === m.value;
+        return (
+          <button
+            key={m.value}
+            type="button"
+            onClick={() => setViewMode(m.value)}
+            className={[
+              'group relative flex items-center gap-2 py-3 text-sm transition',
+              active ? 'text-ink-100' : 'text-ink-400 hover:text-ink-200',
+            ].join(' ')}
+            title={`Press ${m.key}`}
+          >
+            <span className="font-mono text-2xs uppercase tracking-widest text-ink-500">
+              {m.key}
+            </span>
+            <span>{m.label}</span>
+            {active ? (
+              <span className="absolute inset-x-0 -bottom-px h-[2px] bg-lime-500" />
+            ) : null}
+          </button>
+        );
+      })}
     </div>
   );
 }

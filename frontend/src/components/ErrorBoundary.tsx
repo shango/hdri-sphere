@@ -1,4 +1,5 @@
 import { Component, type ReactNode } from 'react';
+import { Button } from '@/components/ui/Button';
 
 interface Props {
   children: ReactNode;
@@ -28,18 +29,14 @@ export class ErrorBoundary extends Component<Props, State> {
   render(): ReactNode {
     if (!this.state.error) return this.props.children;
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 p-8">
-        <h2 className="text-xl font-semibold">Something went wrong.</h2>
-        <pre className="max-w-3xl overflow-auto rounded bg-ink-800 p-4 text-sm text-ink-200">
+      <div className="flex h-full flex-col items-center justify-center gap-4 p-10">
+        <h2 className="text-lg font-semibold text-ink-100">Something went wrong.</h2>
+        <pre className="max-w-3xl overflow-auto rounded-md border border-ink-700 bg-ink-900 p-4 text-xs text-ink-300">
           {this.state.error.message}
         </pre>
-        <button
-          type="button"
-          onClick={this.handleReset}
-          className="rounded bg-accent-500 px-4 py-2 font-medium text-ink-900 hover:bg-accent-600"
-        >
+        <Button variant="primary" onClick={this.handleReset}>
           Reset and try another file
-        </button>
+        </Button>
       </div>
     );
   }

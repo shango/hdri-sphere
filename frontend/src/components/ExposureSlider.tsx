@@ -5,10 +5,7 @@ export function ExposureSlider(): JSX.Element {
   const setExposure = useEditorStore((s) => s.setExposure);
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2">
-      <label htmlFor="exposure" className="w-20 text-xs uppercase tracking-wider text-ink-300">
-        Exposure
-      </label>
+    <div className="flex items-center gap-3">
       <input
         id="exposure"
         type="range"
@@ -17,9 +14,9 @@ export function ExposureSlider(): JSX.Element {
         step={0.1}
         value={exposure}
         onChange={(e) => setExposure(parseFloat(e.target.value))}
-        className="flex-1 accent-accent-500"
+        className="flex-1"
       />
-      <span className="w-16 text-right font-mono text-sm tabular-nums">
+      <span className="w-14 text-right font-mono text-xs tabular-nums text-ink-100">
         {(exposure >= 0 ? '+' : '') + exposure.toFixed(1)} EV
       </span>
     </div>

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEditorStore } from '@/stores/editorStore';
 import { setMask } from '@/lib/api';
+import { Button } from '@/components/ui/Button';
 
 interface Props {
   onResetStrokes: () => void;
@@ -21,41 +22,45 @@ export function BrushControls({ onResetStrokes }: Props): JSX.Element {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['preview', projectId] });
+      void queryClient.invalidateQueries({ queryKey: ['project', projectId] });
       onResetStrokes();
     },
   });
 
   return (
-    <div className="flex w-full max-w-3xl flex-wrap items-center gap-3 rounded border border-ink-700 bg-ink-800/50 px-4 py-2">
-      <span className="text-xs uppercase tracking-wider text-ink-300">Brush</span>
-      <button
-        type="button"
-        onClick={() => setBrushMode('add')}
-        className={[
-          'rounded px-3 py-1 text-sm transition',
-          brushMode === 'add'
-            ? 'bg-red-500/80 text-white'
-            : 'border border-ink-600 text-ink-200 hover:bg-ink-700',
-        ].join(' ')}
-        title="Add to mask (X to toggle)"
-      >
-        Add +
-      </button>
-      <button
-        type="button"
-        onClick={() => setBrushMode('remove')}
-        className={[
-          'rounded px-3 py-1 text-sm transition',
-          brushMode === 'remove'
-            ? 'bg-accent-500 text-ink-900'
-            : 'border border-ink-600 text-ink-200 hover:bg-ink-700',
-        ].join(' ')}
-        title="Erase mask (X to toggle)"
-      >
-        Erase −
-      </button>
+    <div className="flex w-full max-w-3xl flex-wrap items-center gap-3 rounded-md border border-ink-700 bg-ink-850 px-4 py-2">
+      <span className="text-2xs uppercase tracking-widest text-ink-400">Brush</span>
 
-      <label htmlFor="brushSize" className="ml-2 text-xs uppercase tracking-wider text-ink-300">
+      <div className="flex overflow-hidden rounded border border-ink-600">
+        <button
+          type="button"
+          onClick={() => setBrushMode('add')}
+          className={[
+            'px-3 py-1 text-xs transition',
+            brushMode === 'add'
+              ? 'bg-coral-500/20 text-coral-300'
+              : 'text-ink-300 hover:bg-ink-800',
+          ].join(' ')}
+          title="Add to mask (X to toggle)"
+        >
+          Add +
+        </button>
+        <button
+          type="button"
+          onClick={() => setBrushMode('remove')}
+          className={[
+            'border-l border-ink-600 px-3 py-1 text-xs transition',
+            brushMode === 'remove'
+              ? 'bg-lime-500/20 text-lime-400'
+              : 'text-ink-300 hover:bg-ink-800',
+          ].join(' ')}
+          title="Erase mask (X to toggle)"
+        >
+          Erase −
+        </button>
+      </div>
+
+      <label htmlFor="brushSize" className="ml-2 text-2xs uppercase tracking-widest text-ink-400">
         Size
       </label>
       <input
@@ -66,26 +71,22 @@ export function BrushControls({ onResetStrokes }: Props): JSX.Element {
         step={1}
         value={brushSize}
         onChange={(e) => setBrushSize(parseInt(e.target.value, 10))}
-        className="w-40 accent-accent-500"
+        className="w-40"
       />
-      <span className="w-10 font-mono text-sm tabular-nums">{brushSize}px</span>
+      <span className="w-10 font-mono text-xs tabular-nums text-ink-200">{brushSize}px</span>
 
       <div className="ml-auto flex gap-2">
-        <button
-          type="button"
+        <Button
+          size="sm"
+          variant="secondary"
           onClick={() => autoMask.mutate()}
           disabled={autoMask.isPending}
-          className="rounded border border-ink-600 px-3 py-1 text-sm hover:bg-ink-700 disabled:opacity-60"
         >
           {autoMask.isPending ? 'Working…' : 'Auto-detect'}
-        </button>
-        <button
-          type="button"
-          onClick={onResetStrokes}
-          className="rounded border border-ink-600 px-3 py-1 text-sm hover:bg-ink-700"
-        >
+        </Button>
+        <Button size="sm" variant="ghost" onClick={onResetStrokes}>
           Clear strokes
-        </button>
+        </Button>
       </div>
     </div>
   );
