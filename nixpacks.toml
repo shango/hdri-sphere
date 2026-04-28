@@ -1,0 +1,37 @@
+# Railway / Nixpacks build plan.
+#
+# We need both Python (for FastAPI + the core/ pipeline) and Node (to build
+# the React frontend). Nixpacks auto-detects Python from requirements.txt
+# and Node from frontend/package.json, but we declare them explicitly so
+# the build phase can run npm in the frontend/ directory.
+#
+# OpenEXR Python bindings link against system libopenexr / libimath. On
+# the Nixpacks Debian base those come from the apt packages below.
+
+providers = ["python", "node"]
+
+[phases.setup]
+aptPkgs = [
+  "libopenexr-dev",
+  "libimath-dev",
+  "libgl1",
+  "libglib2.0-0",
+]
+
+[phases.install]
+# Install Python deps from requirements.txt (default Nixpacks behavior),
+# plus install Node deps in frontend/.
+dependsOn = ["setup"]
+cmds = [
+  "python -m venv --copies /opt/venv",
+  ". /opt/venv/bin/activate && pip install --upgrade pip",
+  ". /opt/venv/bin/activate && pip install -r requirements.txt",
+  "cd frontend && npm ci",
+]
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["cd frontend && npm run build"]
+
+[start]
+cmd = ". /opt/venv/bin/activate && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
